@@ -27,25 +27,13 @@ class clsLocator {
 
   showPosition(position) {
     let tA = new clsLocate;
-    tA.Draw(position)
+    tA.DrawPos(position)
 
   }
 
   showError(error) {
-    switch (error.code) {
-      case error.PERMISSION_DENIED:
-        this.contentDiv.innerHTML = "User denied the request for Geolocation."
-        break;
-      case error.POSITION_UNAVAILABLE:
-        this.contentDiv.innerHTML = "Location information is unavailable."
-        break;
-      case error.TIMEOUT:
-        this.contentDiv.innerHTML = "The request to get user location timed out."
-        break;
-      case error.UNKNOWN_ERROR:
-        this.contentDiv.innerHTML = "An unknown error occurred."
-        break;
-    }
+    let tA = new clsLocate;
+    tA.errorPos(error);
   }
 
   onclick(){
