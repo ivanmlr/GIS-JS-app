@@ -36,8 +36,8 @@ if ($data != 0){
 
     fclose($fp);
 
-
-
+    $csv = file_get_contents("storage/locations.csv");
+    echo($csv);
 
 
 }
