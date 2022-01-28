@@ -22,7 +22,7 @@ if ($data != 0){
 
     $fp = fopen('storage/locations.csv','a');
     while ($i < count($array)){
-        if ($o == 3){
+        if ($o == 4){
             $o = 0;
             fputcsv($fp, $temp);
             empty($temp);

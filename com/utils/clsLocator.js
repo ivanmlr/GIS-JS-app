@@ -63,9 +63,11 @@ class clsLocator {
     this.today = new Date();
     this.month = this.today.getMonth();
     this.month++;
-    this.date = this.today.getFullYear()+"/"+this.month+"/"+this.today.getDate()+" "+this.today.getHours() + ":" + this.today.getMinutes() + ":" + this.today.getSeconds();
+    this.date = this.today.getFullYear()+"/"+this.month+"/"+this.today.getDate()+","+this.today.getHours() + ":" + this.today.getMinutes() + ":" + this.today.getSeconds();
     this.location = `${this.date},${position.coords.latitude},${position.coords.longitude}`;
-    console.log(this.month);
+    this.lat = position.coords.latitude;
+    this.long=position.coords.longitude;
+    //console.log(this.getUA());
     this.array.push(this.location);
     //this.content.innerHTML = this.array;
     //this.contentDiv.appendChild(this.content);
@@ -73,6 +75,7 @@ class clsLocator {
   }
 
   storeData(){
+    //this.getGeoName(this.lat,this.long);
     this.x = new clsAjax("ws-storelocation.php", 1, "post",this.array)
 
   }
@@ -93,6 +96,46 @@ class clsLocator {
         break;
     }
   }
+  
+  //GET DEVICE TYPE
+  getUA( ){
+    
+    let device = "Unknown";
+    const ua = {
+        "Generic Linux": /Linux/i,
+        "Android": /Android/i,
+        "BlackBerry": /BlackBerry/i,
+        "Bluebird": /EF500/i,
+        "Chrome OS": /CrOS/i,
+        "Datalogic": /DL-AXIS/i,
+        "Honeywell": /CT50/i,
+        "iPad": /iPad/i,
+        "iPhone": /iPhone/i,
+        "iPod": /iPod/i,
+        "macOS": /Macintosh/i,
+        "Windows": /IEMobile|Windows/i,
+        "Zebra": /TC70|TC55/i,
+    }
+    Object.keys(ua).map(v => navigator.userAgent.match(ua[v]) && (device = v));
+    return device;
+
+  }
+
+  //GEOCODING WIP
+  getGeoName(lat,lon){
+    var requestOptions = {
+      method: 'GET',
+    };
+    
+    fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&apiKey=11f811def0d74c7193c07fd79e4e196e`, requestOptions)
+      .then(response => response.json())
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error));
+
+    console.log(result);
 
 
+  }
+
+  
 }
