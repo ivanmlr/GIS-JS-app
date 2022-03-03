@@ -2,6 +2,7 @@
 class clsLocator {
 
   constructor() {
+    this.geocode= new clsGeocode;
     this.x = "";
     this.currentloop = 0;
     this.times = 0;
@@ -17,10 +18,12 @@ class clsLocator {
     this.startButton.addEventListener("click", this.onclick.bind(this));
     this.stopButton.addEventListener("click", this.stopLoc.bind(this));
     this.storeButton.addEventListener("click", this.storeData.bind(this));
-    
+
+
+
   }
 
-
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   getLocation() {
     if (this.currentloop % 100 == 0 || this.currentloop == 0) {
       if (navigator.geolocation) {
@@ -35,6 +38,8 @@ class clsLocator {
     }
   }
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   showPosition(position) {
 
     console.log("locating...");
@@ -44,10 +49,14 @@ class clsLocator {
 
   }
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   showError(error) {
     
     errorPos(error);
   }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   onclick() {
     console.log("ok");
@@ -55,9 +64,13 @@ class clsLocator {
     this.getLocation();
   }
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   stopLoc() {
     this.locating = 0;
   }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   DrawPos(position) {
     this.today = new Date();
@@ -66,7 +79,8 @@ class clsLocator {
     this.date = this.today.getFullYear()+"/"+this.month+"/"+this.today.getDate()+","+this.today.getHours() + ":" + this.today.getMinutes() + ":" + this.today.getSeconds();
     this.location = `${this.date},${position.coords.latitude},${position.coords.longitude}`;
     this.lat = position.coords.latitude;
-    this.long=position.coords.longitude;
+    this.lon=position.coords.longitude;
+
     //console.log(this.getUA());
     this.array.push(this.location);
     //this.content.innerHTML = this.array;
@@ -74,11 +88,15 @@ class clsLocator {
     
   }
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
   storeData(){
-    //this.getGeoName(this.lat,this.long);
+    this.geocode.call(this.lat,this.lon);
     this.x = new clsAjax("ws-storelocation.php", 1, "post",this.array)
 
   }
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   errorPos(error) {
     switch (error.code) {
@@ -96,46 +114,10 @@ class clsLocator {
         break;
     }
   }
-  
-  //GET DEVICE TYPE
-  getUA( ){
-    
-    let device = "Unknown";
-    const ua = {
-        "Generic Linux": /Linux/i,
-        "Android": /Android/i,
-        "BlackBerry": /BlackBerry/i,
-        "Bluebird": /EF500/i,
-        "Chrome OS": /CrOS/i,
-        "Datalogic": /DL-AXIS/i,
-        "Honeywell": /CT50/i,
-        "iPad": /iPad/i,
-        "iPhone": /iPhone/i,
-        "iPod": /iPod/i,
-        "macOS": /Macintosh/i,
-        "Windows": /IEMobile|Windows/i,
-        "Zebra": /TC70|TC55/i,
-    }
-    Object.keys(ua).map(v => navigator.userAgent.match(ua[v]) && (device = v));
-    return device;
 
-  }
-
-  //GEOCODING WIP
-  getGeoName(lat,lon){
-    var requestOptions = {
-      method: 'GET',
-    };
-    
-    fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lon}&apiKey=11f811def0d74c7193c07fd79e4e196e`, requestOptions)
-      .then(response => response.json())
-      .then(result => console.log(result))
-      .catch(error => console.log('error', error));
-
-    console.log(result);
+ 
 
 
-  }
 
   
 }
